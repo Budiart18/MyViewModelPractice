@@ -2,45 +2,40 @@ package com.aeryz.myviewmodelpractice
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.viewModels
 import com.aeryz.myviewmodelpractice.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-
-    //TODO 1: Buat sebuah variable untuk menampung angka
-    private var mCounter: Int = 0
+    private val viewModel : MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //TODO 2: Buat dua buah function untuk membandingkan penggunaan dengan dan tanpa viewModel
-        withoutViewModel()
+        //TODO 2: Buat function baru untuk implement viewModel
+        withViewModel()
     }
 
-    private fun withoutViewModel() {
+    private fun withViewModel() {
         binding.btnPlus.setOnClickListener {
-            mIncrementCount()
+            wIncrementCount()
         }
         binding.btnMinus.setOnClickListener {
-            mDecrementCount()
+            wDecrementCount()
+        }
+        viewModel.vCounter.observe(this){result ->
+            binding.tvCount.text = result.toString()
         }
     }
 
-    private fun mIncrementCount() {
-        mCounter += 1
-        updateUI()
+    private fun wDecrementCount() {
+        viewModel.decrementCount()
     }
 
-    private fun mDecrementCount() {
-        mCounter.let {
-            if (it > 0) mCounter -= 1
-        }
-        updateUI()
+    private fun wIncrementCount() {
+        viewModel.incrementCount()
     }
 
-    private fun updateUI() {
-        binding.tvCount.text = mCounter.toString()
-    }
 }
